@@ -4,7 +4,7 @@
   "description": "Dependencias utilizadas en el proyecto:\r npm i express pg jsonwebtoken cors express-fileupload",
   "main": "index.js",
   "scripts": {
-    "start": "node --watch index.js",
+    "start": "node index.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
