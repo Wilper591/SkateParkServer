@@ -5,7 +5,7 @@ const createUser = async (email, nombre, password, anos_experiencia, especialida
     /* Inicia la transacción */
     await pool.query("BEGIN");
     let estado = false;
-    let fotoURL = `http://localhost:3000/${foto}`;
+    let fotoURL = `https://skateparkserver.onrender.com/${foto}`;
     const query = `INSERT INTO skaters(email, nombre, password, anos_experiencia, especialidad, foto, estado) VALUES($1, $2, $3, $4, $5, $6, $7) RETURNING *;`;
     const values = [email, nombre, password, anos_experiencia, especialidad, fotoURL, `${estado}`];
     const newUser = await pool.query(query, values);
