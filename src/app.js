@@ -25,7 +25,9 @@ app.use("/apiV1", rutas);
 //Ruta Genérica
 app.get("*", (req, res) => {
   try {
-    res.status(404).send(`<h1>Sitio Web No Encontrado</h1>`);
+    res
+      .status(404)
+      .send(`<a href="https://wilper591.github.io/SkateParkClient/">SkatePark</a>`);
   } catch (error) {
     console.error("Hubo un error", error.message);
     res.status(500).send(error.message);
