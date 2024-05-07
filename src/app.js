@@ -13,7 +13,8 @@ let filesConfig = {
     "El peso del archivo que intentas subir supera el limite permitido.",
 };
 let corsOptions = {
-  origin: "*"};
+  origin: "*"
+};
 
 app.use(express.static("data"));
 app.use(expressFileUpload(filesConfig));
