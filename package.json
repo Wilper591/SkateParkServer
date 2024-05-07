@@ -1,0 +1,20 @@
+{
+  "name": "pruebaskatepark",
+  "version": "1.0.0",
+  "description": "Dependencias utilizadas en el proyecto:\r npm i express pg jsonwebtoken cors express-fileupload",
+  "main": "index.js",
+  "scripts": {
+    "start": "node --watch index.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "Jorge Alberto Cerda Rodriguez",
+  "license": "ISC",
+  "dependencies": {
+    "cors": "^2.8.5",
+    "express": "^4.19.2",
+    "express-fileupload": "^1.5.0",
+    "jsonwebtoken": "^9.0.2",
+    "pg": "^8.11.5"
+  }
+}
