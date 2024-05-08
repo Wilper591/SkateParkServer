@@ -44,21 +44,21 @@ router.get("/login", async (req, res) => {
 router.get("/", async (req, res) => {
   try {
     const { token } = req.query;
-    const obtenerUsers = await getUsersAdmin();
-    return jwt.verify(token, secretKey, (err, data) => {
-      err
-        ? res.status(204).json({
-            status: "Error",
-            message: "No se pudo obtener el listado de Skaters",
-            error: err,
-          })
-        : res.status(200).send({
-            status: "OK",
-            is_Admin: true,
-            message: "Listado de Skaters encontrado",
-            datos: obtenerUsers,
-          });
-    });
+    const obtenerUsers = await getUsersAdmin(token);
+    if (obtenerUsers.status === "Error") {
+      res.status(204).json({
+        status: "Error",
+        message: "No se pudo obtener el listado de Skaters",
+        error: obtenerUsers.message,
+      });
+    } else {
+      res.status(200).send({
+        status: "OK",
+        is_Admin: true,
+        message: "Listado de Skaters encontrado",
+        datos: obtenerUsers,
+      });
+    }
   } catch (error) {
     console.error("Hubo un error", error.message);
     res.status(500).send(error.message);
@@ -68,21 +68,21 @@ router.get("/", async (req, res) => {
 router.put("/", async (req, res) => {
   try {
     const { estado, id, token } = req.body;
-    const editState = await updateState(estado, id);
-     return jwt.verify(token, secretKey, (err, data) => {
-       err
-         ? res.status(204).json({
-             status: "Error",
-             message: "Error al editar Estado",
-             error: err,
-           })
-         : res.status(200).send({
-             status: "OK",
-             is_Admin: true,
-             message: "Estado Actualizado",
-             datos: editState,
-           });
-     });
+    const editState = await updateState(estado, id, token);
+    if (editState.status === "Error") {
+      res.status(204).json({
+        status: "Error",
+        message: "Error al editar Estado",
+        error: editState.message,
+      });
+    } else {
+      res.status(200).send({
+        status: "OK",
+        is_Admin: true,
+        message: "Estado Actualizado",
+        datos: editState,
+      });
+    }
   } catch (error) {
     console.error("Hubo un error", error.message);
     res.status(500).send(error.message);

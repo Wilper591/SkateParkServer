@@ -1,5 +1,7 @@
 const { pool } = require("../db.js");
-
+const jwt = require("jsonwebtoken");
+/* JWT Config */
+const secretKey = "Mi Llave Ultra Secreta de Admin";
 const loginAdmin = async (email, password) => {
   try {
     const text =
@@ -32,8 +34,9 @@ const loginAdmin = async (email, password) => {
   }
 };
 
-const getUsersAdmin = async () => {
+const getUsersAdmin = async (token) => {
   try {
+    jwt.verify(token, secretKey);
     const query =
       "SELECT id, nombre, anos_experiencia, especialidad, foto, estado FROM skaters ORDER BY id ASC;";
     const result = await pool.query(query);
@@ -56,6 +59,7 @@ const getUsersAdmin = async () => {
     }
   } catch (error) {
     return {
+      status: "Error",
       message: error.message,
       code: error.code,
       detail: error.detail,
@@ -64,8 +68,9 @@ const getUsersAdmin = async () => {
     };
   }
 };
-const updateState = async (estado, id) => {
+const updateState = async (estado, id, token) => {
   try {
+    jwt.verify(token, secretKey);
     await pool.query("BEGIN");
     const query = "UPDATE skaters SET estado = $1 WHERE id = $2 RETURNING *;";
     const values = [estado, id];
@@ -93,6 +98,7 @@ const updateState = async (estado, id) => {
     }
   } catch (error) {
     return {
+      status: "Error",
       message: error.message,
       code: error.code,
       detail: error.detail,

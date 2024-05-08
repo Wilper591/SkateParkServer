@@ -2,9 +2,12 @@ const { pool } = require("../db.js");
 const fs = require("fs");
 const path = require("path");
 const rutaRaiz = path.join(__dirname, "../..");
+const jwt = require("jsonwebtoken");
+const secretKey = "Mi Llave Ultra Secreta";
 
-const getDatos = async (id) => {
+const getDatos = async (id, token) => {
   try {
+    jwt.verify(token, secretKey);
     const query =
       "SELECT email, nombre, password, anos_experiencia, especialidad FROM skaters WHERE id = $1;";
     const values = [id];
@@ -26,6 +29,7 @@ const getDatos = async (id) => {
     }
   } catch (error) {
     return {
+      status: "Error",
       message: error.message,
       code: error.code,
       detail: error.detail,
@@ -40,9 +44,11 @@ const updateDatos = async (
   password,
   anos_experiencia,
   especialidad,
-  id
+  id,
+  token
 ) => {
   try {
+    jwt.verify(token, secretKey);
     await pool.query("BEGIN");
     const query =
       "UPDATE skaters SET nombre = $1, password = $2, anos_experiencia = $3, especialidad = $4 WHERE id = $5 RETURNING *;";
@@ -59,8 +65,8 @@ const updateDatos = async (
         code: 500,
       };
     } else {
-      /* Success */
       /* Termina la transacción */
+      /* Success */
       await pool.query("COMMIT");
       return {
         status: "Success",
@@ -71,6 +77,7 @@ const updateDatos = async (
     }
   } catch (error) {
     return {
+      status: "Error",
       message: error.message,
       code: error.code,
       detail: error.detail,
@@ -80,15 +87,16 @@ const updateDatos = async (
   }
 };
 
-const deleteDatos = async (id) => {
+const deleteDatos = async (id, token) => {
   try {
+    jwt.verify(token, secretKey);
     await pool.query("BEGIN");
     const query = "DELETE FROM skaters WHERE id = $1 RETURNING *;";
     const values = [id];
     const result = await pool.query(query, values);
     /* Elimina la foto desde data */
     let fotoName = result.rows[0].foto.replace(
-      /^http:\/\/localhost:3000\//,
+      /^https:\/\/skateparkserver.onrender.com\//,
       ""
     );
     fs.unlink(`${rutaRaiz}/data/${fotoName}`, (err) => {
@@ -98,7 +106,7 @@ const deleteDatos = async (id) => {
         console.log("Archivo eliminado correctamente");
       }
     });
-    
+
     if (!result.rowCount) {
       /* Error */
       const rollback = "ROLLBACK";
@@ -121,6 +129,7 @@ const deleteDatos = async (id) => {
     }
   } catch (error) {
     return {
+      status: "Error",
       message: error.message,
       code: error.code,
       detail: error.detail,

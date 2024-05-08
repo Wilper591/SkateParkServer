@@ -2,7 +2,7 @@ const { Router } = require("express");
 const router = Router();
 const { createUser } = require("../controllers/registro.controller.js");
 const path = require("path");
-const rutaRaiz = path.join( __dirname, "../../..")
+const rutaRaiz = path.join( __dirname, "../..")
 
 router.post("/", async (req, res) => {
   try {
