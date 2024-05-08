@@ -4,7 +4,7 @@ const { loginUser } = require("../controllers/login.controller.js");
 const jwt = require("jsonwebtoken");
 /* JWT Config */
 const secretKey = "Mi Llave Ultra Secreta";
-const tokenOptions = { expiresIn: "15s" };
+const tokenOptions = { expiresIn: "360s" };
 
 router.get("/", async (req, res) => {
   try {
