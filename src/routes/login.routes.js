@@ -13,8 +13,9 @@ router.get("/", async (req, res) => {
     const selectedUser = {
       email,
       password,
+      id: String(loggedUser.result.map(data=>data.id))
     };
-    
+    console.log(selectedUser);
     if (loggedUser.status === "Success") {
       const token = jwt.sign(selectedUser, secretKey, tokenOptions);
       

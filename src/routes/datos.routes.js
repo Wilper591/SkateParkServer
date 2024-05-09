@@ -11,7 +11,7 @@ router.get("/", async (req, res) => {
   try {
     const { id, token } = req.query;
     const getData = await getDatos(id, token);
-
+console.log(getData);
     if (getData.status === "Error") {
       res.status(204).json({
         status: "Error",
