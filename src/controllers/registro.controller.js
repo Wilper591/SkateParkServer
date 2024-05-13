@@ -31,7 +31,6 @@ const createUser = async (email, nombre, password, anos_experiencia, especialida
       };
     }
   } catch (error) {
-    await pool.end();
     return {
       message: error.message,
       code: error.code,
