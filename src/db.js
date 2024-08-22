@@ -3,12 +3,8 @@ const { Pool } = pg;
 const dotenv = require("dotenv").config();
 
 const config = {
-  user: process.env.USER,
-  host: process.env.HOST,
-  database: process.env.DATABASE,
-  password: process.env.PASSWORD,
-  port: process.env.PORT_DB,
-  ssl: process.env.SSL_DB,
+  connectionString: process.env.URI_DB,
+  ssl: process.env.SSL_DB === "true" ? { rejectUnauthorized: false } : false,
 };
 /* const config = {
   user: "postgres",
@@ -19,4 +15,12 @@ const config = {
 }; */
 const pool = new Pool(config);
 
+pool
+  .connect()
+  .then((client) => {
+    console.log("Conexión exitosa a la base de datos");
+    client.release(); // Libera el cliente después de la conexión
+  })
+  .catch((err) => console.error("Error de conexión", err.stack));
+  
 module.exports = { pool };
